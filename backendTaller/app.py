@@ -67,6 +67,19 @@ def get_artists_by_user():
     data = request.json
     id = data["user"]
 
+    artistas = datos.loc[datos["user_000001"]==id,["Deep Dish"]]
+    print(artistas)
+
+    return artistas.to_json(orient="records")
+
+
+
+@app.route("/get_recomendaciones", methods=["POST", "GET"])
+def get_recomendaciones():
+    print(request.json)
+    data = request.json
+    id = data["user"]
+
     artistas = datos.loc[datos["user_000001"]==id]
     print(artistas)
 
