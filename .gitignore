@@ -6,3 +6,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+userid-profile.tsv
+userid-timestamp-artid-artname-traid-traname.tsv
+
+__pycache__/
