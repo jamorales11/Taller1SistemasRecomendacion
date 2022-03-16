@@ -48,11 +48,9 @@ def get_user():
     return {"user":users[id]}
 
 
-@app.route("/find_usuario", methods= ["POST", "GET"])
-def get_usuario_df():
+@app.route("/find_usuario/<id>", methods= ["POST", "GET"])
+def get_usuario_df(id):
     print(request.json)
-    data = request.json
-    id = data["user"]
 
     usuario = usuarios.loc[usuarios["#id"]==id]
     print(usuario)
@@ -61,11 +59,9 @@ def get_usuario_df():
 
 
 
-@app.route("/find_artists_by_user", methods=["POST", "GET"])
-def get_artists_by_user():
+@app.route("/find_artists_by_user/<id>", methods=["POST", "GET"])
+def get_artists_by_user(id):
     print(request.json)
-    data = request.json
-    id = data["user"]
 
     artistas = datos.loc[datos["user_000001"]==id,["Deep Dish"]]
     print(artistas)
@@ -74,11 +70,9 @@ def get_artists_by_user():
 
 
 
-@app.route("/get_recomendaciones", methods=["POST", "GET"])
-def get_recomendaciones():
+@app.route("/get_recomendaciones/<id>", methods=["POST", "GET"])
+def get_recomendaciones(id):
     print(request.json)
-    data = request.json
-    id = data["user"]
 
     artistas = datos.loc[datos["user_000001"]==id]
     print(artistas)
