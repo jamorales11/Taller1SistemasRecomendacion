@@ -1,27 +1,59 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from './usuario.service';
+import { UsuarioService } from '../services/usuario.service';
+import { Usuario } from './usuario';
+
 
 @Component({
   selector: 'app-usuario',
   templateUrl: './usuario.component.html',
-  styleUrls: ['./usuario.component.css'],
-  providers: [UsuarioService]
+  styleUrls: ['./usuario.component.css']
 })
 export class UsuarioComponent implements OnInit {
 
-  constructor(private usuarioService: UsuarioService) {this.usuario_id = "";}
+  usuario: Usuario = new Usuario();
 
-  usuario_id : string;
+  constructor(private usuarioService: UsuarioService) {
+    this.usuarioService.get_usuario("user_000001").subscribe((data:any) => {
+      console.log(data[0]);
+
+      this.usuario.id = data[0]["#id"];
+
+      if(data[0]["age"] != null){
+        this.usuario.age = data[0]["age"];
+      } else {
+        this.usuario.age = "N/A"
+      }
+
+      if(data[0]["gender"] == "m"){
+        this.usuario.gender = "Male";
+      } else if(data[0]["gender"] == "f"){
+        this.usuario.gender = "Female";
+      } else if(data[0]["gender"] != null){
+        this.usuario.gender = data[0]["gender"];
+      } else {
+        this.usuario.gender = "N/A"
+      }
+
+      if(data[0]["country"] != null){
+        this.usuario.country = data[0]["country"];
+      } else {
+        this.usuario.country = "N/A"
+      }
+
+      if(data[0]["registered"] != null){
+        this.usuario.registered = data[0]["registered"];
+      } else {
+        this.usuario.registered = "N/A"
+      }
+      console.log(this.usuario);
+    });
+  }
+
 
   ngOnInit(): void {
-    if(this.usuario_id){
-      this.getUsuario(this.usuario_id);
-      console.log(this.getUsuario(this.usuario_id));
-    }
+
   }
 
-  getUsuario(usuario_id: string):void{
-    this.usuarioService.getUsuario(usuario_id);
-  }
+  
 
 }

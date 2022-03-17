@@ -7,7 +7,6 @@ import pandas as pd
 import numpy as np
 import json
 
-users = {"001": "Julio", "002": "Maria"}
 
 if not os.path.exists("./userid-profile.tsv"):
     raise ValueError("El archivo de userid-profile.tsv no fue encontrado en el path")
@@ -38,14 +37,6 @@ CORS(app)
 def hello_from_root():
     return jsonify(message = "Hello from Root")
 
-
-@app.route("/find_user", methods= ["POST", "GET"])
-def get_user():
-    print(request.json)
-    data = request.json
-    id = data["user"]
-
-    return {"user":users[id]}
 
 
 @app.route("/find_usuario/<id>", methods= ["POST", "GET"])
