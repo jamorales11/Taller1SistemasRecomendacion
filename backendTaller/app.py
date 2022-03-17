@@ -49,6 +49,13 @@ def get_usuario_df(id):
     return usuario.to_json(orient="records")
 
 
+@app.route("/create_usuario", methods= ["POST"])
+def create_usuario_df():
+    print(request.json)
+    return request.json
+
+
+
 
 @app.route("/find_artists_by_user/<id>", methods=["POST", "GET"])
 def get_artists_by_user(id):

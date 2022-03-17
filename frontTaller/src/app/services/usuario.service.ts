@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Usuario } from '../usuario/usuario';
 
 const API_URL = "http://127.0.0.1:5000/"
 
@@ -18,7 +19,17 @@ export class UsuarioService {
     headers: new HttpHeaders({ "Content-Type": "application/json" })
   };
 
+
+  createUsuario(usuario: Usuario){
+
+    return this.http.post(API_URL + 'create_usuario', usuario, this.httpOptions);
+  }
+
   get_usuario(id:string){
     return this.http.get(API_URL + 'find_usuario/' + id);
+  }
+
+  get_artistas_by_id(id:string){
+    return this.http.get(API_URL + 'find_artists_by_user/' + id);
   }
 }
