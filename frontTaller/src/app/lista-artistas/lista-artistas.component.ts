@@ -8,9 +8,12 @@ import { UsuarioService } from '../services/usuario.service';
 })
 export class ListaArtistasComponent implements OnInit {
 
+  artistasEscuchados : any[] = [];
+
   constructor(private usuarioService: UsuarioService) {
-      this.usuarioService.get_artistas_by_id("user_000001").subscribe((data:any) =>{
+      this.usuarioService.get_artistas_by_id(usuarioService.idLogged).subscribe((data:any) =>{
         console.log(data)
+        this.artistasEscuchados = data;
       })
    }
 

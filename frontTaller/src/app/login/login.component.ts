@@ -29,11 +29,8 @@ export class LoginComponent implements OnInit {
   }
 
 
-  logout(){
-    this.usuarioService.setLogStatus(false);
-    this.usuarioService.idLogged = "";
-    this.router.navigate(['/login'])
-  }
+  
 
 
 }
+

@@ -1,1 +1,14 @@
-<p>lista-artistas works!</p>
+<br>
+<h2>Artistas escuchados</h2>
+<br>
+
+<div class="row row-cols-1 row-cols-md-4 g-4">
+    <div *ngFor="let artista of artistasEscuchados" class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{artista["artname"]}}</h5>
+          <p class="card-text"></p>
+        </div>
+      </div>
+    </div>
+</div>

@@ -68,7 +68,7 @@ def create_usuario_df():
 def get_artists_by_user(id):
     print(request.json)
 
-    artistas = datos.loc[datos["userid"]==id,["artname"]].drop_duplicates().count()
+    artistas = datos.loc[datos["userid"]==id,["artname"]].drop_duplicates()
     print(artistas)
 
     return artistas.to_json(orient="records")
