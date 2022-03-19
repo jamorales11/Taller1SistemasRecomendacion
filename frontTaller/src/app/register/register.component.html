@@ -4,7 +4,7 @@
 <form name="usuario" (ngSubmit)="createUsuario()">
     <div class="mb-3">
       <label for="id" class="form-label">ID</label>
-      <input type="text" class="form-control" id="id" [(ngModel)]="nuevoUsuario.id" name="usuarioId">
+      <input type="text" class="form-control" id="id" [(ngModel)]="nuevoUsuario.id" name="usuarioId" required>
     </div>
 
     <div class="mb-3">

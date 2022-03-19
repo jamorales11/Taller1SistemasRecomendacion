@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UsuarioService } from '../services/usuario.service';
+import { Usuario } from '../usuario/usuario';
 
 @Component({
   selector: 'app-login',
@@ -7,9 +10,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  constructor(public usuarioService: UsuarioService, private router: Router) { }
 
-  ngOnInit(): void {
+
+  ngOnInit(): void {  }
+
+  login(){
+      console.log(this.usuarioService.idLogged);
+
+      this.usuarioService.get_usuario(this.usuarioService.idLogged).subscribe((data: any) => {
+        if (data.length == 0){
+          console.log("No existe este usuario");
+        } else {
+          this.usuarioService.setLogStatus(true);
+          this.router.navigate(['/usuario'])
+        }
+      });
   }
+
+
+  logout(){
+    this.usuarioService.setLogStatus(false);
+    this.usuarioService.idLogged = "";
+    this.router.navigate(['/login'])
+  }
+
 
 }

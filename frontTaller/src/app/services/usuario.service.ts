@@ -9,7 +9,10 @@ const API_URL = "http://127.0.0.1:5000/"
 })
 export class UsuarioService {
 
-  
+  loggedIn : boolean = false;
+
+  idLogged: string = "";
+
 
   constructor( private http: HttpClient) { 
     console.log("Usuario API lista")
@@ -31,5 +34,14 @@ export class UsuarioService {
 
   get_artistas_by_id(id:string){
     return this.http.get(API_URL + 'find_artists_by_user/' + id);
+  }
+
+  getLogStatus (){
+    return this.loggedIn;
+  }
+
+  setLogStatus (status: boolean){
+    
+    this.loggedIn = status;
   }
 }

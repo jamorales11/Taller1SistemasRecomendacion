@@ -14,7 +14,7 @@ export class UsuarioComponent implements OnInit {
   usuario: Usuario = new Usuario();
 
   constructor(private usuarioService: UsuarioService) {
-    this.usuarioService.get_usuario("user_000001").subscribe((data:any) => {
+    this.usuarioService.get_usuario(usuarioService.idLogged).subscribe((data:any) => {
       console.log(data[0]);
 
       this.usuario.id = data[0]["#id"];
