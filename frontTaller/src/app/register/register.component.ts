@@ -14,10 +14,14 @@ export class RegisterComponent implements OnInit {
 
   nuevoUsuario: Usuario = new Usuario;
 
+  monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
 
   createUsuario(): Usuario{
     console.log("Formulario enviado");
-    this.nuevoUsuario.registered = Date.now().toString();
+    var fecha = new Date();
+    this.nuevoUsuario.registered = this.monthNames[fecha.getMonth()].toString() + " " + fecha.getDate().toString() + ", " + fecha.getFullYear().toString();
     console.log(this.nuevoUsuario);
 
     this.usuarioService.get_usuario(this.nuevoUsuario.id).subscribe( (data:any) => {
