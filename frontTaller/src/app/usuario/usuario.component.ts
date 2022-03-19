@@ -17,7 +17,7 @@ export class UsuarioComponent implements OnInit {
     this.usuarioService.get_usuario(usuarioService.idLogged).subscribe((data:any) => {
       console.log(data[0]);
 
-      this.usuario.id = data[0]["#id"];
+      this.usuario.id = data[0]["id"];
 
       if(data[0]["age"] != null){
         this.usuario.age = data[0]["age"];

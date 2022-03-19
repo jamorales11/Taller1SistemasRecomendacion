@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UsuarioService } from '../services/usuario.service';
 import { Usuario } from '../usuario/usuario';
 
@@ -9,7 +10,7 @@ import { Usuario } from '../usuario/usuario';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private usuarioService: UsuarioService) { }
+  constructor(private usuarioService: UsuarioService, private router: Router) { }
 
   nuevoUsuario: Usuario = new Usuario;
 
@@ -18,9 +19,17 @@ export class RegisterComponent implements OnInit {
     console.log("Formulario enviado");
     this.nuevoUsuario.registered = Date.now().toString();
     console.log(this.nuevoUsuario);
-    this.usuarioService.createUsuario(this.nuevoUsuario).subscribe((usuario: any) => {
-      this.nuevoUsuario = usuario;
-    });
+
+    this.usuarioService.get_usuario(this.nuevoUsuario.id).subscribe( (data:any) => {
+      if (data.length == 0){
+        this.usuarioService.createUsuario(this.nuevoUsuario).subscribe((usuario: any) => {
+          this.nuevoUsuario = usuario;
+          this.router.navigate(['/login'])
+        });
+      }
+    })
+
+    
 
     return this.nuevoUsuario;
   }

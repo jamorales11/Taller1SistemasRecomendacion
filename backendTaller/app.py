@@ -1,5 +1,6 @@
 import json
 from multiprocessing.sharedctypes import Value
+from operator import index
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
@@ -13,7 +14,7 @@ if not os.path.exists("./userid-profile.tsv"):
 else:
     print("El archivo de usuarios ha sido cargado")
 
-usuarios= pd.read_csv("./userid-profile.tsv", sep="\t")
+usuarios= pd.read_csv("./userid-profile.tsv", sep="\t", names=["id", "gender", "age", "country", "registered"], header=0)
 
 print(usuarios)
 
@@ -24,7 +25,7 @@ if not os.path.exists("./userid-timestamp-artid-artname-traid-traname.tsv"):
 else:
     print("El archivo de datos ha sido cargado")
 
-datos= pd.read_csv("./userid-timestamp-artid-artname-traid-traname.tsv", sep="\t", nrows=2000000)
+datos= pd.read_csv("./userid-timestamp-artid-artname-traid-traname.tsv", sep="\t", nrows=2000000, names=["userid", "timestamp", "artid", "artname", "traid", "traname"])
 
 print(datos)
 
@@ -43,7 +44,7 @@ def hello_from_root():
 def get_usuario_df(id):
     print(request.json)
 
-    usuario = usuarios.loc[usuarios["#id"]==id]
+    usuario = usuarios.loc[usuarios["id"]==id]
     print(usuario)
 
     return usuario.to_json(orient="records")
@@ -52,6 +53,12 @@ def get_usuario_df(id):
 @app.route("/create_usuario", methods= ["POST"])
 def create_usuario_df():
     print(request.json)
+
+    global usuarios
+    data = pd.DataFrame(data=request.json, index=[0])
+    result = pd.concat([usuarios, data], ignore_index=True)
+    usuarios = result
+    print(usuarios)
     return request.json
 
 
@@ -61,7 +68,7 @@ def create_usuario_df():
 def get_artists_by_user(id):
     print(request.json)
 
-    artistas = datos.loc[datos["user_000001"]==id,["Deep Dish"]]
+    artistas = datos.loc[datos["userid"]==id,["artname"]]
     print(artistas)
 
     return artistas.to_json(orient="records")
@@ -72,7 +79,7 @@ def get_artists_by_user(id):
 def get_recomendaciones(id):
     print(request.json)
 
-    artistas = datos.loc[datos["user_000001"]==id]
+    artistas = datos.loc[datos["userid"]==id]
     print(artistas)
 
     return artistas.to_json(orient="records")
