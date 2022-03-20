@@ -1,0 +1,14 @@
+<br>
+<h2>Recomendaciones</h2>
+<br>
+
+<div class="row row-cols-1 row-cols-md-4 g-4">
+    <div *ngFor="let recomendacion of recomendaciones" class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{recomendacion["artist_name"]}}</h5>
+          <p class="card-text"><strong>Rating de predicción:</strong> {{recomendacion["pred_rating"]}}</p>
+        </div>
+      </div>
+    </div>
+</div>

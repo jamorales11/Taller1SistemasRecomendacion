@@ -11,6 +11,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ListaArtistasComponent } from './lista-artistas/lista-artistas.component';
+import { ListaRecomendacionesComponent } from './lista-recomendaciones/lista-recomendaciones.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ListaArtistasComponent } from './lista-artistas/lista-artistas.componen
     NavbarComponent,
     LoginComponent,
     RegisterComponent,
-    ListaArtistasComponent
+    ListaArtistasComponent,
+    ListaRecomendacionesComponent
   ],
   imports: [
     BrowserModule,

@@ -36,6 +36,10 @@ export class UsuarioService {
     return this.http.get(API_URL + 'find_artists_by_user/' + id);
   }
 
+  get_recomendaciones_by_id(id:string){
+    return this.http.get(API_URL + 'get_recomendaciones/' + id);
+  }
+
   getLogStatus (){
     return this.loggedIn;
   }

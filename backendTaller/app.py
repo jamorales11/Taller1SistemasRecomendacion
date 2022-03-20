@@ -3,31 +3,47 @@ from multiprocessing.sharedctypes import Value
 from operator import index
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from get_recommendations import *
 import os
 import pandas as pd
 import numpy as np
 import json
 
 
-if not os.path.exists("./userid-profile.tsv"):
+if not os.path.exists("dataset/userid-profile.tsv"):
     raise ValueError("El archivo de userid-profile.tsv no fue encontrado en el path")
 else:
     print("El archivo de usuarios ha sido cargado")
 
-usuarios= pd.read_csv("./userid-profile.tsv", sep="\t", names=["id", "gender", "age", "country", "registered"], header=0)
-
-print(usuarios)
+usuarios= pd.read_csv("dataset/userid-profile.tsv", sep="\t", names=["id", "gender", "age", "country", "registered"], header=0)
 
 
 
-if not os.path.exists("./userid-timestamp-artid-artname-traid-traname.tsv"):
+if not os.path.exists("dataset/userid-timestamp-artid-artname-traid-traname.tsv"):
     raise ValueError("El archivo de userid-timestamp-artid-artname-traid-traname.tsv no fue encontrado en el path")
 else:
     print("El archivo de datos ha sido cargado")
 
-datos= pd.read_csv("./userid-timestamp-artid-artname-traid-traname.tsv", sep="\t", nrows=2000000, names=["userid", "timestamp", "artid", "artname", "traid", "traname"])
+data_cols = ['user_id', 'timestamp', 'artist_id', 'artist_name', 'track_id', 'track_name']
+songs = pd.read_csv('dataset/userid-timestamp-artid-artname-traid-traname.tsv', sep='\t', nrows=6000000, error_bad_lines=False, \
+                names = data_cols)
 
-print(datos)
+songs_id = pd.DataFrame(songs['track_name'].unique(), columns = ['track_name'])
+songs_id['track_id'] = range(1, len(songs_id)+1)
+
+artists_id = pd.DataFrame(songs['artist_name'].unique(), columns = ['artist_name'])
+artists_id['artist_id'] = range(1, len(artists_id)+1)
+
+songs = songs[['user_id', 'artist_name', 'track_name']]
+songs = songs.merge(artists_id, on='artist_name', how='left')
+songs = songs.merge(songs_id, on='track_name', how='left')
+songs = songs[['user_id', 'artist_id', 'artist_name', 'track_id', 'track_name']]
+print(songs)
+
+
+
+model = load_model('best_model.pkl')
+ratings = initialize(songs)
 
 
 app = Flask(__name__)
@@ -68,7 +84,7 @@ def create_usuario_df():
 def get_artists_by_user(id):
     print(request.json)
 
-    artistas = datos.loc[datos["userid"]==id,["artname"]].drop_duplicates()
+    artistas = songs.loc[songs["user_id"]==id,["artist_name"]].drop_duplicates()
     print(artistas)
 
     return artistas.to_json(orient="records")
@@ -79,7 +95,9 @@ def get_artists_by_user(id):
 def get_recomendaciones(id):
     print(request.json)
 
-    artistas = datos.loc[datos["userid"]==id]
-    print(artistas)
+    recommendations = get_K_recommendations(uid=id, ratings=songs, items=artists_id, top_k=20, model=model)
 
-    return artistas.to_json(orient="records")
+    
+    print(recommendations)
+
+    return recommendations.to_json(orient="records")
