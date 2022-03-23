@@ -1,1 +1,13 @@
-<p>preferencias works!</p>
+<form name="idusuario" (ngSubmit)="agregarPreferencias()">
+    <div class="mb-3">
+        <label for="exampleDataList" class="form-label">Datalist example</label>
+        <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search artists...">
+        <datalist id="datalistOptions">
+            <div *ngFor="let artista of artistas">
+                <option value="{{artista['artista']}}">
+            </div>
+        </datalist>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>

@@ -12,4 +12,10 @@ export class PreferenciasComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  artistas = [{"artista":"1"},{"artista":"2"},{"artista":"3" }];
+
+  agregarPreferencias(){
+
+  }
+
 }
