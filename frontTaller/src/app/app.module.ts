@@ -12,6 +12,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ListaArtistasComponent } from './lista-artistas/lista-artistas.component';
 import { ListaRecomendacionesComponent } from './lista-recomendaciones/lista-recomendaciones.component';
+import { PreferenciasComponent } from './preferencias/preferencias.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { ListaRecomendacionesComponent } from './lista-recomendaciones/lista-rec
     LoginComponent,
     RegisterComponent,
     ListaArtistasComponent,
-    ListaRecomendacionesComponent
+    ListaRecomendacionesComponent,
+    PreferenciasComponent
   ],
   imports: [
     BrowserModule,
