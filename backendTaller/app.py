@@ -1,3 +1,4 @@
+from crypt import methods
 import json
 from multiprocessing.sharedctypes import Value
 from operator import index
@@ -38,8 +39,6 @@ songs = songs[['user_id', 'artist_name', 'track_name']]
 songs = songs.merge(artists_id, on='artist_name', how='left')
 songs = songs.merge(songs_id, on='track_name', how='left')
 songs = songs[['user_id', 'artist_id', 'artist_name', 'track_id', 'track_name']]
-print(songs)
-
 
 
 model = load_model('best_model.pkl')
@@ -101,3 +100,13 @@ def get_recomendaciones(id):
     print(recommendations)
 
     return recommendations.to_json(orient="records")
+
+
+@app.route("/get_popular_artists", methods= ["POST", "GET"])
+def get_popular_artists():
+    populares = songs["artist_name"].value_counts().head(40)
+    populares = populares.to_frame().reset_index()
+    populares.columns = ['artist_name', 'count']
+    populares = populares.sort_values(by=["artist_name"])
+    print(populares)
+    return populares.to_json(orient="records")
