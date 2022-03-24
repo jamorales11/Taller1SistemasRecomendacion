@@ -1,13 +1,49 @@
-<form name="idusuario" (ngSubmit)="agregarPreferencias()">
-    <div class="mb-3">
-        <label for="exampleDataList" class="form-label">Datalist example</label>
-        <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search artists...">
-        <datalist id="datalistOptions">
-            <div *ngFor="let artista of artistas">
-                <option value="{{artista['artista']}}">
-            </div>
-        </datalist>
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+
+            <form name="idusuario" (ngSubmit)="agregarDeBuscador()">
+                <div class="mb-3">
+                    <br>
+                    <h5 for="exampleDataList" class="form-label">Buscar Artista</h5>
+                    <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search artists..." [(ngModel)]="seleccion" name="artista" [disabled]="seleccionCompleta">
+                    <datalist id="datalistOptions">
+                        <div *ngFor="let artista of populares">
+                            <option value="{{artista['artist_name']}}" >
+                        </div>
+                    </datalist>
+                </div>
+
+                <button type="submit" class="btn btn-primary" [disabled]="seleccionCompleta">Agregar</button>
+                
+
+                <div class="mb-3 row row-cols-1 row-cols-md-4 g-4">
+                    
+                    <div *ngFor="let artista of populares" class="col">
+                        <div class="form-check">
+                            <input #artistaCheck class="form-check-input" type="checkbox" value="" id="artistaCheck" [checked]="isOnList(artista['artist_name'])" (change)="agregarDeCheckbox(artista['artist_name'], artistaCheck.checked)" [disabled]="seleccionCompleta"> 
+                            <label class="form-check-label" for="flexCheckDefault" name="artista2">
+                                {{artista['artist_name']}}
+                            </label>
+                        </div>
+                    </div>    
+                </div>
+
+            </form>
+
+        </div>
+
+        <div class="col">
+            <br>
+            <h4> Lista artistas seleccionados</h4>
+            <ol class="list-group" *ngFor="let seleccionado of seleccionadas">
+                <li class="list-group-item">{{seleccionadas.indexOf(seleccionado)+1}}. {{seleccionado}}</li>
+            </ol>
+            <button type="button" class="btn btn-primary" [disabled]="!seleccionCompleta" (click)="onGuardar()">Guardar Preferencias</button>
+        </div>
+
+
+
+
     </div>
-    
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+</div>

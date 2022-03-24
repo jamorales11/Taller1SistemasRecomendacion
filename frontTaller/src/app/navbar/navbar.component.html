@@ -1,7 +1,8 @@
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Last-FM Recommendations</a>
+      <a class="navbar-brand" routerLink="/login" routerLinkActive="active" *ngIf="!usuarioService.loggedIn">Last-FM Recommendations</a>
+      <a class="navbar-brand" routerLink="/usuario" routerLinkActive="active" *ngIf="usuarioService.loggedIn">Last-FM Recommendations</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -12,11 +13,14 @@
                 <a class="nav-link active" aria-current="page" routerLink="/usuario" routerLinkActive="active" *ngIf="usuarioService.loggedIn">Datos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" routerLink="/artistas" routerLinkActive="active" *ngIf="usuarioService.loggedIn">Artistas</a>
+                <a class="nav-link active" aria-current="page" routerLink="/artistas" routerLinkActive="active" *ngIf="usuarioService.loggedIn && usuarioService.conArtistas">Artistas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" routerLink="/recomendaciones" routerLinkActive="active" *ngIf="usuarioService.loggedIn">Recomendaciones</a>
+                <a class="nav-link active" aria-current="page" routerLink="/recomendaciones" routerLinkActive="active" *ngIf="usuarioService.loggedIn && usuarioService.conArtistas">Recomendaciones</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" routerLink="/preferencias" routerLinkActive="active" *ngIf="usuarioService.loggedIn && !usuarioService.conArtistas">Seleccionar Preferencias</a>
+          </li>
         </ul>
       </div>
 

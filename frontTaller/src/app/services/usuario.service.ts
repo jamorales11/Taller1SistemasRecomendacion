@@ -13,6 +13,8 @@ export class UsuarioService {
 
   idLogged: string = "";
 
+  conArtistas: boolean = false;
+
 
   constructor( private http: HttpClient) { 
     console.log("Usuario API lista")
@@ -38,6 +40,10 @@ export class UsuarioService {
 
   get_recomendaciones_by_id(id:string){
     return this.http.get(API_URL + 'get_recomendaciones/' + id);
+  }
+
+  get_artistas_populares(){
+    return this.http.get(API_URL + 'get_popular_artists');
   }
 
   getLogStatus (){

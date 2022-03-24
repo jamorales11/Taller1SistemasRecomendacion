@@ -28,7 +28,9 @@ export class RegisterComponent implements OnInit {
       if (data.length == 0){
         this.usuarioService.createUsuario(this.nuevoUsuario).subscribe((usuario: any) => {
           this.nuevoUsuario = usuario;
-          this.router.navigate(['/login'])
+          this.usuarioService.idLogged = this.nuevoUsuario.id;
+          this.usuarioService.setLogStatus(true);
+          this.router.navigate(['/preferencias'])
         });
       }
     })

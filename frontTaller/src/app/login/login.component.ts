@@ -22,6 +22,15 @@ export class LoginComponent implements OnInit {
         if (data.length == 0){
           console.log("No existe este usuario");
         } else {
+          this.usuarioService.get_artistas_by_id(this.usuarioService.idLogged).subscribe((data: any) => {
+            if(data.length == 0){
+              console.log("No tiene usuarios");
+              this.usuarioService.conArtistas = false;
+            }
+            else{
+              this.usuarioService.conArtistas = true;
+            }
+          });
           this.usuarioService.setLogStatus(true);
           this.router.navigate(['/usuario'])
         }
