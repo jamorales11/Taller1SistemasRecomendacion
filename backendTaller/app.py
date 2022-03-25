@@ -2,6 +2,7 @@ from crypt import methods
 import json
 from multiprocessing.sharedctypes import Value
 from operator import index
+from urllib import response
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from get_recommendations import *
@@ -39,6 +40,7 @@ songs = songs[['user_id', 'artist_name', 'track_name']]
 songs = songs.merge(artists_id, on='artist_name', how='left')
 songs = songs.merge(songs_id, on='track_name', how='left')
 songs = songs[['user_id', 'artist_id', 'artist_name', 'track_id', 'track_name']]
+print(songs)
 
 
 model = load_model('best_model.pkl')
@@ -57,34 +59,57 @@ def hello_from_root():
 
 @app.route("/find_usuario/<id>", methods= ["POST", "GET"])
 def get_usuario_df(id):
-    print(request.json)
+    #print(request.json)
 
     usuario = usuarios.loc[usuarios["id"]==id]
-    print(usuario)
+    #print(usuario)
 
     return usuario.to_json(orient="records")
 
 
 @app.route("/create_usuario", methods= ["POST"])
 def create_usuario_df():
-    print(request.json)
+    #print(request.json)
 
     global usuarios
     data = pd.DataFrame(data=request.json, index=[0])
     result = pd.concat([usuarios, data], ignore_index=True)
     usuarios = result
-    print(usuarios)
+    #print(usuarios)
     return request.json
 
 
+@app.route("/add_preferencias", methods= ["POST"])
+def add_preferencias_df():
+    print(request.json)
+
+    global songs
+    data = pd.DataFrame(data=request.json)
+    print(data)
+
+    result = pd.concat([songs, data], ignore_index=True)
+    songs = result
+    print(songs)
+    
+    return data.to_json()
+
+
+@app.route("/get_artists", methods=["POST", "GET"])
+def get_artists():
+    #print(request.json)
+
+    artistas = songs["artist_name"].value_counts().head(6000)
+    artistas = artistas.to_frame().reset_index()
+    artistas.columns = ['artist_name', 'count']
+    artistas = artistas.sort_values(by=["artist_name"])
+    return artistas.to_json(orient="records")
 
 
 @app.route("/find_artists_by_user/<id>", methods=["POST", "GET"])
 def get_artists_by_user(id):
-    print(request.json)
+    #print(request.json)
 
     artistas = songs.loc[songs["user_id"]==id,["artist_name"]].drop_duplicates()
-    print(artistas)
 
     return artistas.to_json(orient="records")
 
@@ -92,12 +117,12 @@ def get_artists_by_user(id):
 
 @app.route("/get_recomendaciones/<id>", methods=["POST", "GET"])
 def get_recomendaciones(id):
-    print(request.json)
+    #print(request.json)
 
     recommendations = get_K_recommendations(uid=id, ratings=songs, items=artists_id, top_k=20, model=model)
 
     
-    print(recommendations)
+    #print(recommendations)
 
     return recommendations.to_json(orient="records")
 
@@ -108,5 +133,4 @@ def get_popular_artists():
     populares = populares.to_frame().reset_index()
     populares.columns = ['artist_name', 'count']
     populares = populares.sort_values(by=["artist_name"])
-    print(populares)
     return populares.to_json(orient="records")

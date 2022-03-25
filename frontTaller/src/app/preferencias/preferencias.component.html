@@ -8,7 +8,7 @@
                     <h5 for="exampleDataList" class="form-label">Buscar Artista</h5>
                     <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search artists..." [(ngModel)]="seleccion" name="artista" [disabled]="seleccionCompleta">
                     <datalist id="datalistOptions">
-                        <div *ngFor="let artista of populares">
+                        <div *ngFor="let artista of artistas">
                             <option value="{{artista['artist_name']}}" >
                         </div>
                     </datalist>

@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
         } else {
           this.usuarioService.get_artistas_by_id(this.usuarioService.idLogged).subscribe((data: any) => {
             if(data.length == 0){
-              console.log("No tiene usuarios");
+              console.log("No tiene artistas");
               this.usuarioService.conArtistas = false;
             }
             else{

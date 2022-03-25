@@ -30,12 +30,20 @@ export class UsuarioService {
     return this.http.post(API_URL + 'create_usuario', usuario, this.httpOptions);
   }
 
+  addPreferencias(preferencias: any[]){
+    return this.http.post(API_URL + 'add_preferencias', preferencias, this.httpOptions);
+  }
+
   get_usuario(id:string){
     return this.http.get(API_URL + 'find_usuario/' + id);
   }
 
   get_artistas_by_id(id:string){
     return this.http.get(API_URL + 'find_artists_by_user/' + id);
+  }
+
+  get_artistas(){
+    return this.http.get(API_URL + 'get_artists');
   }
 
   get_recomendaciones_by_id(id:string){

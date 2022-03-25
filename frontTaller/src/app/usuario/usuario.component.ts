@@ -48,6 +48,16 @@ export class UsuarioComponent implements OnInit {
       }
       console.log(this.usuario);
     });
+
+    this.usuarioService.get_artistas_by_id(this.usuarioService.idLogged).subscribe((data: any) => {
+      if(data.length == 0){
+        console.log("No tiene artistas");
+        this.usuarioService.conArtistas = false;
+      }
+      else{
+        this.usuarioService.conArtistas = true;
+      }
+    });
   }
 
 
