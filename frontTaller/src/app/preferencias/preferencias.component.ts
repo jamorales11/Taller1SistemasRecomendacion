@@ -84,4 +84,23 @@ export class PreferenciasComponent implements OnInit {
    });
  }
 
+ moverArriba(index:number){
+  let temp = this.seleccionadas[index];
+  this.seleccionadas[index] = this.seleccionadas[index-1];
+  this.seleccionadas[index-1] = temp;;
+ }
+
+ moverAbajo(index:number){
+  let temp = this.seleccionadas[index];
+  this.seleccionadas[index] = this.seleccionadas[index+1];
+  this.seleccionadas[index+1] = temp;
+}
+
+eliminar(index:number){
+  this.seleccionadas.splice(index,1);
+  if(this.seleccionadas.length < 10){
+    this.seleccionCompleta = false;
+  } 
+}
+
 }
