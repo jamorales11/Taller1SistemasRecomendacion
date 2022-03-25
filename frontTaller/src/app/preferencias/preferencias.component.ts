@@ -34,6 +34,7 @@ export class PreferenciasComponent implements OnInit {
   agregarDeBuscador(){
     if(!this.seleccionadas.includes(this.seleccion)){
       this.seleccionadas.push(this.seleccion);
+      this.seleccion = "";
 
     }
     if(this.seleccionadas.length == 10){
@@ -71,7 +72,7 @@ export class PreferenciasComponent implements OnInit {
     let j = 10-i;
 
     while(j>0){
-      let incidencia = {"user_id": this.usuarioService.idLogged,'artist_id': "", "artist_name": this.seleccionadas[i], 'track_id': "", 'track_name': ""};
+      let incidencia = {"user_id": this.usuarioService.idLogged,'artist_id': this.artistas.find(element => element["artist_name"] == this.seleccionadas[i]).artist_id, "artist_name": this.seleccionadas[i], 'track_id': "", 'track_name': ""};
       incidencias.push(incidencia);
       j--;
     }
