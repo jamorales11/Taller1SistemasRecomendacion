@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Usuario } from '../usuario/usuario';
 
-const API_URL = "http://172.24.41.184:5000/"
+const API_URL = "http://172.24.41.184:8081/"
 
 @Injectable({
   providedIn: 'root'
