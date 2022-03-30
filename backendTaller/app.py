@@ -137,3 +137,7 @@ def get_popular_artists():
     populares.columns = ['artist_name', 'count']
     populares = populares.sort_values(by=["artist_name"])
     return populares.to_json(orient="records")
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
