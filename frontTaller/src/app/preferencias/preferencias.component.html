@@ -4,8 +4,17 @@
 
             <form name="idusuario" (ngSubmit)="agregarDeBuscador()">
                 <div class="mb-3">
-                    <br>
+                    <div class="mb-3">
+                        <br>
+                        <h3 for="exampleDataList" class="form-label">Agregar artistas predilectos</h3>
+                        <a> A continuación, agrega tu top 10 de artistas preferidos. Conforme los vayas agregando, podrás reordernarlos (usando las flechas al lado de cada nombre) o eliminarlos antes de guardar la lista. </a>
+                        <br>
+                        <br>
+                    </div>
+                    
+
                     <h5 for="exampleDataList" class="form-label">Buscar Artista</h5>
+                    <a>Puedes usar esta barra de búsqueda para encontrarlos...</a>
                     <input class="form-control" list="datalistOptions" id="exampleDataList" placeholder="Type to search artists..." [(ngModel)]="seleccion" name="artista" [disabled]="seleccionCompleta">
                     <datalist id="datalistOptions">
                         <div *ngFor="let artista of artistas">
@@ -16,6 +25,15 @@
 
                 <button type="submit" class="btn btn-primary" [disabled]="seleccionCompleta">Agregar</button>
                 
+                <div class="mb-3">
+                    <br>
+                    <br>
+
+                    <a>...o seleccionarlos de esta lista de artistas populares:</a>
+                    <br>
+
+                </div>
+
 
                 <div class="mb-3 row row-cols-1 row-cols-md-4 g-4">
                     

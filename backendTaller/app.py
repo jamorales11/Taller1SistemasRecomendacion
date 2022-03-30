@@ -102,6 +102,9 @@ def get_artists():
     artistas = artistas.to_frame().reset_index()
     artistas.columns = ['artist_name', 'count']
     artistas = artistas.sort_values(by=["artist_name"])
+    print(artistas.merge(artists_id, how="inner", on="artist_name"))
+    artistas = artistas.merge(artists_id, how="inner", on="artist_name")
+
     return artistas.to_json(orient="records")
 
 
