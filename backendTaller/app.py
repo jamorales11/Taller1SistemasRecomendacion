@@ -27,8 +27,9 @@ else:
     print("El archivo de datos ha sido cargado")
 
 data_cols = ['user_id', 'timestamp', 'artist_id', 'artist_name', 'track_id', 'track_name']
-songs = pd.read_csv('dataset/userid-timestamp-artid-artname-traid-traname.tsv', sep='\t', nrows=6000000, error_bad_lines=False, \
-                names = data_cols)
+songs = pd.read_csv('dataset/userid-timestamp-artid-artname-traid-traname.tsv', sep='\t', error_bad_lines=False, names = data_cols)
+
+#songs = pd.read_csv('dataset/userid-timestamp-artid-artname-traid-traname.tsv', sep='\t', nrows=6000000, error_bad_lines=False, names = data_cols)
 
 songs_id = pd.DataFrame(songs['track_name'].unique(), columns = ['track_name'])
 songs_id['track_id'] = range(1, len(songs_id)+1)
