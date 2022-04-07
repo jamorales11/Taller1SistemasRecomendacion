@@ -43,9 +43,14 @@ songs = songs.merge(songs_id, on='track_name', how='left')
 songs = songs[['user_id', 'artist_id', 'artist_name', 'track_id', 'track_name']]
 print(songs)
 
+intervals = {
+        'intervalo 1': {'min':0, 'max':10, 'valor':0},
+        'intervalo 2': {'min':10, 'max':None, 'valor':1}
+}
 
 model = load_model('best_model.pkl')
-ratings = initialize(songs)
+predictions, ratings_artists = initialize(model, intervals, songs)
+print(ratings_artists)
 
 
 app = Flask(__name__)
@@ -91,6 +96,27 @@ def add_preferencias_df():
     result = pd.concat([songs, data], ignore_index=True)
     songs = result
     print(songs)
+
+    global ratings_artists
+    ratings_artists = songs[['user_id', 'artist_id']].value_counts().to_frame().reset_index()
+    ratings_artists.columns = ['user_id', 'artist_id', 'rating']
+    ratings_artists = generate_intervals(ratings_artists, intervals)
+    
+    n_samples = 80
+    ratings_artists = ratings_artists.groupby('user_id').sample(n=n_samples, random_state=1, replace=True).drop_duplicates()
+    
+    min_rating, max_rating = ratings_artists['rating'].min(), ratings_artists['rating'].max()
+    reader = Reader(rating_scale=(min_rating, max_rating))
+    ratings_artists_dataset = Dataset.load_from_df(ratings_artists[['user_id', 'artist_id', 'rating']], reader)
+    
+    rating_data = ratings_artists_dataset.build_full_trainset()
+    test = rating_data.build_anti_testset()
+    
+    global predictions
+    predictions = model.test(test)
+
+    print(ratings_artists)
+
     
     return data.to_json()
 
@@ -123,7 +149,7 @@ def get_artists_by_user(id):
 def get_recomendaciones(id):
     #print(request.json)
 
-    recommendations = get_K_recommendations(uid=id, ratings=songs, items=artists_id, top_k=20, model=model)
+    recommendations = get_K_recommendations(uid=id, ratings=songs, items=artists_id, top_k=20, predictions=predictions)
 
     
     #print(recommendations)

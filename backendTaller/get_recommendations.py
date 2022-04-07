@@ -1,4 +1,6 @@
 import pandas as pd
+from surprise import Dataset
+from surprise import Reader
 import pickle
 
 def load_model(model_name):
@@ -20,14 +22,9 @@ def generate_intervals(dataframe, intervals):
             dataframe.loc[dataframe['rating']>=min_i, 'rating'] = valor_i
     return dataframe
 
-def initialize(songs):
+def initialize(model, intervals, songs):
     
     
-    
-    intervals = {
-        'intervalo 1': {'min':0, 'max':2, 'valor':0},
-        'intervalo 2': {'min':2, 'max':None, 'valor':1}
-    }
     
     ratings_artists = songs[['user_id', 'artist_id']].value_counts().to_frame().reset_index()
     ratings_artists.columns = ['user_id', 'artist_id', 'rating']
@@ -36,28 +33,36 @@ def initialize(songs):
     n_samples = 80
     ratings_artists = ratings_artists.groupby('user_id').sample(n=n_samples, random_state=1, replace=True).drop_duplicates()
     
-    return ratings_artists
+    min_rating, max_rating = ratings_artists['rating'].min(), ratings_artists['rating'].max()
+    reader = Reader(rating_scale=(min_rating, max_rating))
+    ratings_artists_dataset = Dataset.load_from_df(ratings_artists[['user_id', 'artist_id', 'rating']], reader)
+    
+    rating_data = ratings_artists_dataset.build_full_trainset()
+    test = rating_data.build_anti_testset()
+    
+    predictions = model.test(test)
+    
+    return predictions, ratings_artists
 
-def get_K_recommendations(uid, ratings, items, top_k, model):
+def get_K_recommendations(uid, ratings, items, top_k, predictions):
     
     items_user = list(ratings[ratings['user_id']==uid]['artist_id'].drop_duplicates())
     unseen_items = [x for x in items['artist_id'] if x not in items_user]
     
-    top_K_recommendations = []
-    for item in unseen_items:
-        pred = model.predict(uid=uid, iid=item)
-        if not pred.details['was_impossible']:
-            top_K_recommendations.append([item, pred.est])
+    user_predictions = list(filter(lambda x: x[0]==uid, predictions))
+    top_K_recommendations = [[x.iid, x.est] for x in user_predictions if x.details['was_impossible']==False and \
+                              x.iid in unseen_items]
     
     if len(top_K_recommendations)<top_k:
-        for item in unseen_items:
-            pred = model.predict(uid=uid, iid=item)
-            top_K_recommendations.append([item, pred.est])
+        top_K_recommendations_tmp = [[x.iid, x.est] for x in user_predictions if x.details['was_impossible']==True and \
+                                      x.iid in unseen_items]
+        n_items = top_k - len(top_K_recommendations)
+        top_K_recommendations = top_K_recommendations + top_K_recommendations_tmp[:n_items]
             
     top_K_recommendations_df = pd.DataFrame(data=top_K_recommendations, columns=['item', 'pred_rating'])
     top_K_recommendations_df = top_K_recommendations_df.sort_values(by='pred_rating', ascending = False).head(top_k)
-    top_K_recommendations_df['pred_rating'] = top_K_recommendations_df['pred_rating'].round(decimals=0)
+    top_K_recommendations_df['pred_rating'] = top_K_recommendations_df['pred_rating']
     top_K_recommendations_df = top_K_recommendations_df.merge(items, left_on='item', right_on='artist_id', how='left')
     
-    return top_K_recommendations_df[['artist_name', 'pred_rating']].reset_index(drop=True)
+    return top_K_recommendations_df[['artist_name', 'pred_rating', 'artist_id']].reset_index(drop=True)
 

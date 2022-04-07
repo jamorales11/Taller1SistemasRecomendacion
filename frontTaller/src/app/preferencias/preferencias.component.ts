@@ -67,9 +67,10 @@ export class PreferenciasComponent implements OnInit {
    console.log(this.seleccionadas);
    let incidencias : any[] = []; 
    let i = 0;
+   let k = 0;
    while(i<this.seleccionadas.length){
 
-    let j = 10-i;
+    let j = 100-k;
 
     while(j>0){
       let incidencia = {"user_id": this.usuarioService.idLogged,'artist_id': this.artistas.find(element => element["artist_name"] == this.seleccionadas[i]).artist_id, "artist_name": this.seleccionadas[i], 'track_id': "", 'track_name': ""};
@@ -77,6 +78,7 @@ export class PreferenciasComponent implements OnInit {
       j--;
     }
     i++;
+    k += 10;
    }
    console.log(incidencias);
    this.usuarioService.addPreferencias(incidencias).subscribe(() => {
